@@ -295,9 +295,7 @@ static irqreturn_t vm_interrupt(int irq, void *opaque)
 	if (unlikely(status & VIRTIO_MMIO_INT_CONFIG)) {
 		virtio_config_changed(&vm_dev->vdev);
 		ret = IRQ_HANDLED;
-	}
-
-	if (likely(status & VIRTIO_MMIO_INT_VRING)) {
+	} else {
 		spin_lock_irqsave(&vm_dev->lock, flags);
 		list_for_each_entry(info, &vm_dev->virtqueues, node)
 			ret |= vring_interrupt(irq, info->vq);
